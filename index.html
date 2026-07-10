@@ -9,8 +9,83 @@
 <meta property="og:title" content="VectraCalc: All-in-One Calculator">
 <meta property="og:site_name" content="VectraCalc">
 <meta property="og:url" content="https://vectracalc.com/">
+<meta property="og:image" content="https://vectracalc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VectraCalc All-in-One Calculator — 209 calculators, step-by-step solutions, graphs">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VectraCalc: All-in-One Calculator">
+<meta name="twitter:description" content="209 calculators, step-by-step solutions, interactive graphs & 3D — all offline.">
+<meta name="twitter:image" content="https://vectracalc.com/og-image.png">
+<meta name="theme-color" content="#14161b">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Structured data: helps Google understand this page is an Android app. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://vectracalc.com/#org",
+      "name": "VectraCalc",
+      "url": "https://vectracalc.com/",
+      "logo": "https://vectracalc.com/apple-touch-icon.png",
+      "email": "hello@vectracalc.com"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://vectracalc.com/#website",
+      "url": "https://vectracalc.com/",
+      "name": "VectraCalc",
+      "publisher": { "@id": "https://vectracalc.com/#org" },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "VectraCalc: All-in-One Calculator",
+      "operatingSystem": "Android",
+      "applicationCategory": "UtilitiesApplication",
+      "url": "https://vectracalc.com/",
+      "downloadUrl": "https://play.google.com/store/apps/details?id=com.vectracalc.vectra_calc",
+      "installUrl": "https://play.google.com/store/apps/details?id=com.vectracalc.vectra_calc",
+      "image": "https://vectracalc.com/og-image.png",
+      "description": "An all-in-one calculator app with 209 calculators, step-by-step solutions on 190+ of them, interactive 2D and 3D graphs, and full offline support.",
+      "publisher": { "@id": "https://vectracalc.com/#org" },
+      "featureList": [
+        "209 calculators in one app",
+        "Step-by-step solutions on 190+ calculators",
+        "Interactive graphs and 3D plotting on 40+ calculators",
+        "Export and share solutions as an image",
+        "Works fully offline with no account required"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free to download. Optional Pro upgrade removes ads and unlocks all features."
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Does it really work offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes — completely. Every calculator, graph, and step-by-step runs on your device. There is no sign-in and nothing you enter is ever sent anywhere." } },
+        { "@type": "Question", "name": "What's free, and what's Pro?",
+          "acceptedAnswer": { "@type": "Answer", "text": "All 209 calculators are free to use. Pro removes ads and unlocks unlimited step-by-step solutions, interactive graphs and 3D, exporting solutions, and unlimited saved calculations and favorites." } },
+        { "@type": "Question", "name": "If I buy Pro and reinstall, do I keep it?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pro is tied to your Google account through Google Play. Reinstall the app, or open it on another device signed into the same account, and Pro restores automatically." } },
+        { "@type": "Question", "name": "How do I cancel a subscription?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Subscriptions are managed in Google Play under Payments and subscriptions. You can cancel anytime and keep Pro until the end of your billing period. The Lifetime plan is a one-time purchase with nothing to cancel." } },
+        { "@type": "Question", "name": "Which devices are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "VectraCalc is an Android app, available on Google Play. It adapts to phones and tablets and defaults to a dark theme." } }
+      ]
+    }
+  ]
+}
+</script>
 <meta property="og:description" content="209 calculators, step-by-step solutions, interactive graphs & 3D — all offline. From VectraCalc.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,12 +137,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 .hero h1{font-size:clamp(2.4rem,5.4vw,3.9rem);margin:20px 0 0}
 .hero h1 .amber{color:var(--accent)}
 .hero-sub{color:var(--muted);font-size:clamp(1.02rem,1.6vw,1.18rem);margin-top:20px;max-width:500px}
-.hero-actions{display:flex;align-items:center;gap:16px;margin-top:34px;flex-wrap:wrap}
-.play-btn{display:inline-flex;align-items:center;gap:13px;background:#000;border:1px solid #3a3f49;border-radius:13px;padding:11px 20px;transition:transform .14s,border-color .2s}
-.play-btn:hover{transform:translateY(-2px);border-color:var(--accent)}
-.play-btn svg{width:26px;height:26px;flex:0 0 auto}
-.play-btn .pb-t{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#c9cdd4;font-family:var(--mono)}
-.play-btn .pb-b{font-family:var(--display-face);font-weight:600;font-size:1.14rem;line-height:1.1;color:#fff}
+.hero-actions{display:flex;align-items:center;gap:6px;margin-top:26px;flex-wrap:wrap}
+/* Official Google Play badge (Google's own artwork — never recreated or restyled).
+   Google requires: minimum height 40px, and clear space on all sides equal to 1/4 of
+   the badge height. The SVG is edge-to-edge, so the clear space is added as padding.
+   The badge itself is never recolored, stretched, or filtered — only the link moves. */
+.play-badge{--badge-h:60px;display:inline-block;line-height:0;padding:calc(var(--badge-h)/4);transition:transform .16s var(--ease)}
+.play-badge img{height:var(--badge-h);width:auto;display:block}
+.play-badge:hover{transform:translateY(-2px)}
+.play-badge:active{transform:translateY(0)}
+@media(max-width:480px){.play-badge{--badge-h:52px}}
 .soon{font-family:var(--mono);font-size:.72rem;color:var(--accent);border:1px solid var(--accent-soft);background:var(--accent-soft);padding:6px 11px;border-radius:20px;letter-spacing:.08em}
 .hero-stats{display:flex;gap:30px;margin-top:44px;flex-wrap:wrap}
 .hstat .n{font-family:var(--mono);font-weight:600;font-size:1.7rem;color:var(--text)}
@@ -253,9 +332,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
       <h1>Every calculation, <span class="amber">one app.</span></h1>
       <p class="hero-sub">209 calculators with step-by-step solutions, interactive graphs and 3D — and it all works completely offline. Math, finance, physics, conversions, and far more.</p>
       <div class="hero-actions">
-        <a class="play-btn" href="#get" aria-label="Get VectraCalc on Google Play">
-          <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="#00C3FF" d="M48 34c-5 5-8 12-8 22v400c0 10 3 17 8 22l224-222z"/><path fill="#00E676" d="M272 256 48 478c8 7 20 8 33 0l264-150z"/><path fill="#FFCE00" d="m345 328 79-45c25-14 25-40 0-54l-79-45-73 72z"/><path fill="#FF3D47" d="M272 256 345 184 81 34c-13-8-25-7-33 0z"/></svg>
-          <span><span class="pb-t">Get it on</span><span class="pb-b">Google Play</span></span>
+        <a class="play-badge" href="https://play.google.com/store/apps/details?id=com.vectracalc.vectra_calc" target="_blank" rel="noopener">
+          <img src="google-play-badge.svg" alt="Get it on Google Play" width="239" height="71">
         </a>
         <span class="soon">◆ Launching soon</span>
       </div>
@@ -449,7 +527,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
     </div>
     <div class="faq-list">
       <details class="faq reveal"><summary>Does it really work offline?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">Yes — completely. Every calculator, graph, and step-by-step runs on your device. There's no sign-in and nothing you enter is ever sent anywhere.</div></details>
-      <details class="faq reveal"><summary>What's free, and what's Pro?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">All 209 calculators are free to use. Pro unlocks unlimited step-by-step solutions, interactive graphs and 3D, exporting solutions, and unlimited saved calculations and favorites.</div></details>
+      <details class="faq reveal"><summary>What's free, and what's Pro?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">All 209 calculators are free to use. Pro removes ads and unlocks unlimited step-by-step solutions, interactive graphs and 3D, exporting solutions, and unlimited saved calculations and favorites.</div></details>
       <details class="faq reveal"><summary>If I buy Pro and reinstall, do I keep it?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">Yes. Pro is tied to your Google account through Google Play. Reinstall the app, or open it on another device signed into the same account, and Pro restores automatically — no extra login.</div></details>
       <details class="faq reveal"><summary>How do I cancel a subscription?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">Subscriptions are managed in Google Play → Payments &amp; subscriptions. You can cancel anytime and keep Pro until the end of your billing period. The Lifetime plan is a one-time purchase with nothing to cancel.</div></details>
       <details class="faq reveal"><summary>Which devices are supported?<svg class="chev" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></summary><div class="faq-body">VectraCalc is an Android app, available on Google Play. It adapts to phones and tablets, and defaults to a comfortable dark theme.</div></details>
@@ -483,9 +561,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
       <span class="eyebrow">Get VectraCalc</span>
       <h2>All-in-one calculator. Free to start.</h2>
       <p>Coming soon to Google Play. Add your calculators, keep them offline, and go Pro whenever you're ready.</p>
-      <a class="play-btn" style="margin-inline:auto;width:max-content" href="https://play.google.com/store/apps/details?id=com.vectracalc.vectra_calc" target="_blank" rel="noopener" aria-label="Get VectraCalc on Google Play">
-        <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="#00C3FF" d="M48 34c-5 5-8 12-8 22v400c0 10 3 17 8 22l224-222z"/><path fill="#00E676" d="M272 256 48 478c8 7 20 8 33 0l264-150z"/><path fill="#FFCE00" d="m345 328 79-45c25-14 25-40 0-54l-79-45-73 72z"/><path fill="#FF3D47" d="M272 256 345 184 81 34c-13-8-25-7-33 0z"/></svg>
-        <span><span class="pb-t">Get it on</span><span class="pb-b">Google Play</span></span>
+      <a class="play-badge" style="margin-inline:auto;width:max-content" href="https://play.google.com/store/apps/details?id=com.vectracalc.vectra_calc" target="_blank" rel="noopener">
+        <img src="google-play-badge.svg" alt="Get it on Google Play" width="239" height="71">
       </a>
     </div>
   </div>
