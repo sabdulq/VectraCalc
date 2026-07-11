@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vectracalc.com/sitemap.xml
+Sitemap: https://www.vectracalc.com/sitemap.xml
