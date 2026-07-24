@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Deletion — VectraCalc</title>
+<meta name="description" content="How to delete your data in VectraCalc, the all-in-one calculator app. Clear your on-device data in the app, and reset advertising data through Google.">
+<meta name="robots" content="index,follow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="canonical" href="https://www.vectracalc.com/all-in-one-calculator/delete-data/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14161b; --panel:#1c1f26; --panel-2:#22262f; --line:#2c313c; --line-soft:#23272f;
+  --text:#eceef1; --muted:#9197a3; --faint:#6b717c;
+  --accent:#f4a62a; --accent-2:#ffc15e; --accent-soft:rgba(244,166,42,.12); --accent-ink:#1a1205; --good:#4cc38a;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --display-face:'Space Grotesk',var(--sans);
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --wrap:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:5px}
+.wrap{width:min(var(--wrap),92vw);margin-inline:auto}
+.nav{position:sticky;top:0;z-index:20;background:rgba(20,22,27,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--display-face);font-weight:700;font-size:1.1rem;color:var(--text)}
+.brand:hover{text-decoration:none}
+.logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(145deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:var(--accent-ink);font-family:var(--mono);font-weight:600;box-shadow:0 6px 16px -6px var(--accent)}
+.back{font-size:.9rem;color:var(--muted);font-weight:500}
+.back:hover{color:var(--text);text-decoration:none}
+header.hero{padding:56px 0 34px;border-bottom:1px solid var(--line-soft)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display-face);font-weight:600;font-size:clamp(2rem,5vw,2.8rem);letter-spacing:-.02em;margin:14px 0 10px}
+.meta{font-family:var(--mono);font-size:.8rem;color:var(--faint)}
+main{padding:8px 0 40px}
+h2{font-family:var(--display-face);font-weight:600;font-size:1.35rem;letter-spacing:-.01em;margin:40px 0 12px}
+h2 .num{font-family:var(--mono);font-size:.9rem;color:var(--accent);margin-right:10px}
+p,li{color:var(--muted);font-size:1rem}
+p{margin-bottom:14px}
+ol,ul{margin:0 0 16px 4px;padding-left:22px}
+li{margin-bottom:9px}
+strong{color:var(--text);font-weight:600}
+.tldr{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;padding:20px 22px;margin:34px 0}
+.tldr b{font-family:var(--display-face);display:block;margin-bottom:6px;color:var(--text)}
+.tldr p{color:var(--muted);font-size:.96rem;margin:0}
+.table{width:100%;border-collapse:collapse;margin:8px 0 18px;font-size:.94rem}
+.table th,.table td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+.table th{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:500}
+.table td{color:var(--muted)} .table td strong{color:var(--text)}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:20px;letter-spacing:.04em}
+.pill.del{background:rgba(76,195,138,.14);color:var(--good)}
+.pill.keep{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
+.callout{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:.92rem;color:var(--muted);margin:16px 0}
+footer{border-top:1px solid var(--line);padding:34px 0 44px;margin-top:30px}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
+.foot .fb{display:flex;align-items:center;gap:10px;font-family:var(--display-face);font-weight:600;color:var(--text)}
+.foot .fl{font-family:var(--mono);font-size:.8rem;color:var(--faint)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="/"><span class="logo">V</span>VectraCalc</a>
+    <a class="back" href="/all-in-one-calculator/">← Back to app</a>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Data control</span>
+    <h1>Delete your data</h1>
+    <div class="meta">VectraCalc — All-in-One Calculator, by VectraCalc &nbsp;·&nbsp; Updated <span id="date">2026</span></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tldr">
+    <b>In short</b>
+    <p>VectraCalc has no account and no server. Everything the app stores lives on your device, and you can erase all of it directly in the app or by uninstalling. Advertising data collected by Google can be reset through your device's Google settings. Steps for both are below.</p>
+  </div>
+</div>
+
+<main>
+<div class="wrap">
+
+  <h2><span class="num">1</span>Delete your in-app data (history, saved, favorites, settings)</h2>
+  <p>This data is stored only on your device. To delete it in <strong>VectraCalc — All-in-One Calculator</strong>:</p>
+  <ol>
+    <li>Open the app and go to <strong>Settings</strong> (bottom navigation).</li>
+    <li>Scroll to the <strong>Data</strong> section.</li>
+    <li>Tap <strong>Clear history</strong>, <strong>Clear saved calculations</strong>, and/or <strong>Clear favorites</strong>. Each asks you to confirm.</li>
+    <li>To restore all preferences to defaults, tap <strong>Reset settings</strong>.</li>
+  </ol>
+  <p>Or delete everything at once by <strong>uninstalling the app</strong> — this removes all VectraCalc data from your device immediately.</p>
+
+  <h2><span class="num">2</span>Delete advertising data collected by Google</h2>
+  <p>To keep the app free, VectraCalc shows ads via Google AdMob, which collects your device's advertising ID and an approximate (IP-based) location. This data is held by Google, not by us. You can control and delete it:</p>
+  <ul>
+    <li><strong>Reset or delete your advertising ID:</strong> on your device, open <strong>Settings → Google → Ads</strong>, then choose <strong>Delete advertising ID</strong> or <strong>Reset advertising ID</strong>.</li>
+    <li><strong>Remove ads entirely:</strong> upgrade to <strong>VectraCalc Pro</strong> in the app — Pro users are shown no ads.</li>
+    <li><strong>Manage data held by Google:</strong> use Google's account privacy tools at <a href="https://myactivity.google.com" target="_blank" rel="noopener">myactivity.google.com</a> and see the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+  </ul>
+
+  <h2><span class="num">3</span>What is deleted and what is kept</h2>
+  <table class="table">
+    <tr><th>Data</th><th>Where</th><th>On your request</th></tr>
+    <tr><td><strong>Calculation history</strong></td><td>Your device only</td><td><span class="pill del">Deleted</span> immediately</td></tr>
+    <tr><td><strong>Saved calculations</strong></td><td>Your device only</td><td><span class="pill del">Deleted</span> immediately</td></tr>
+    <tr><td><strong>Favorites &amp; settings</strong></td><td>Your device only</td><td><span class="pill del">Deleted</span> immediately</td></tr>
+    <tr><td><strong>Advertising ID &amp; ad data</strong></td><td>Google (AdMob)</td><td><span class="pill del">Deleted / reset</span> via device Google settings</td></tr>
+    <tr><td><strong>Purchase records (Pro)</strong></td><td>Google Play</td><td><span class="pill keep">Kept by Google Play</span></td></tr>
+  </table>
+  <div class="callout">Your <strong>Pro purchase records are kept by Google Play</strong>, not by us. They are what let your Pro plan restore after reinstalling or on another device. To manage them, use Google Play → Payments &amp; subscriptions. We do not store or control this data. There is no additional retention period for any data on our side, because we operate no servers and store nothing off your device.</div>
+
+  <h2><span class="num">4</span>Contact</h2>
+  <p>Questions about deleting your data? Email <a href="mailto:vectracalc@gmail.com">vectracalc@gmail.com</a> and we'll help. See our full <a href="/all-in-one-calculator/privacy/">Privacy Policy</a> for more.</p>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="fb" href="/"><span class="logo" style="width:28px;height:28px;font-size:.9rem">V</span>VectraCalc</a>
+    <span class="fl">© <span id="yr"></span> VectraCalc · works offline</span>
+  </div>
+</footer>
+<script>
+  var d=new Date();
+  document.getElementById('date').textContent=d.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('yr').textContent=d.getFullYear();
+</script>
+</body>
+</html>
