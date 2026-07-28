@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found — VectraCalc</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#14161b">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14161b; --panel:#1c1f26; --line:#2c313c; --text:#eceef1; --muted:#9197a3; --faint:#6b717c;
+  --accent:#f4a62a; --accent-2:#ffc15e; --accent-ink:#1a1205;
+  --sans:'Inter',system-ui,sans-serif; --display-face:'Space Grotesk',var(--sans); --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;display:grid;place-items:center;text-align:center;padding:24px;overflow:hidden}
+.glow{position:fixed;left:50%;top:30%;transform:translate(-50%,-50%);width:700px;height:460px;background:radial-gradient(ellipse at center,rgba(244,166,42,.12),transparent 65%);filter:blur(12px);pointer-events:none}
+.box{position:relative;max-width:520px}
+.code{font-family:var(--mono);font-weight:600;font-size:clamp(4.5rem,15vw,7rem);color:var(--accent);line-height:1;letter-spacing:-.03em}
+.code span{display:inline-block;animation:drop .7s var(--ease) backwards}
+.code span:nth-child(2){animation-delay:.1s}.code span:nth-child(3){animation-delay:.2s}
+@keyframes drop{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
+h1{font-family:var(--display-face);font-size:clamp(1.4rem,4vw,1.9rem);margin:18px 0 10px}
+p{color:var(--muted);font-size:1rem}
+.expr{font-family:var(--mono);color:var(--faint);font-size:.9rem;margin-top:8px}
+.btns{display:flex;justify-content:center;gap:12px;margin-top:30px;flex-wrap:wrap}
+a.btn{display:inline-flex;padding:12px 22px;border-radius:11px;font-weight:600;font-size:.95rem;text-decoration:none;transition:transform .15s var(--ease),box-shadow .2s,border-color .2s}
+a.solid{background:var(--accent);color:var(--accent-ink)}
+a.solid:hover{transform:translateY(-2px);box-shadow:0 10px 26px -10px var(--accent)}
+a.ghost{border:1px solid var(--line);color:var(--muted);background:var(--panel)}
+a.ghost:hover{border-color:var(--accent);color:var(--text);transform:translateY(-2px)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="box">
+  <div class="code"><span>4</span><span>0</span><span>4</span></div>
+  <h1>This page doesn't compute.</h1>
+  <p>The page you're looking for was moved, renamed, or never existed.</p>
+  <p class="expr">solve( page = found ) → no real solutions</p>
+  <div class="btns">
+    <a class="btn solid" href="/">Back to home</a>
+    <a class="btn ghost" href="/all-in-one-calculator/">See the calculator app</a>
+  </div>
+</div>
+</body>
+</html>
