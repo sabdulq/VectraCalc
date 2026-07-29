@@ -164,6 +164,10 @@ html.v3d-active .hero-bg .sym{display:none}
 .apps{background:linear-gradient(180deg,transparent,var(--panel) 50%,transparent);overflow:hidden}
 .apps>.wrap{position:relative;z-index:1}
 #apps canvas.v3d.v3d-on{opacity:.5}
+/* 3D tilt on the app card (CSS transforms only — no WebGL) */
+#apps .wrap{perspective:1200px}
+.app-card{position:relative;transform-style:preserve-3d;will-change:transform}
+.app-card .glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.12),transparent 46%);z-index:3}
 .app-card{display:grid;grid-template-columns:1fr 1fr;background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;transition:border-color .25s,transform .25s var(--ease)}
 .app-card:hover{border-color:var(--accent);transform:translateY(-4px)}
 .app-info{padding:clamp(28px,4vw,48px)}
@@ -370,6 +374,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
         <span class="orbit" style="right:22%;bottom:26%;animation-delay:1s">=</span>
         <div class="app-tile">V</div>
       </div>
+      <span class="glare" aria-hidden="true"></span>
     </a>
 
     <div class="app-soon reveal">
@@ -524,12 +529,43 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
       btn.disabled=true; btn.textContent='Sending…';
       fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
         .then(function(r){
-          if(r.ok){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; }
+          if(r.ok){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; burstConfetti(); }
           else { status.className='f-status err'; status.textContent='Something went wrong. Please try again, or email vectracalc@gmail.com.'; }
         })
         .catch(function(){ status.className='f-status err'; status.textContent='Network error. Please try again, or email vectracalc@gmail.com.'; })
         .finally(function(){ btn.disabled=false; btn.textContent='Send message'; });
     });
+  }
+
+  // 3D tilt on the app card (pointer devices only; CSS transforms, no WebGL)
+  var card=document.querySelector('.app-card');
+  if(card && !reduce && window.matchMedia('(pointer:fine)').matches){
+    var glare=card.querySelector('.glare');
+    card.addEventListener('pointermove',function(e){
+      var r=card.getBoundingClientRect();
+      var px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+      card.style.transform='translateY(-4px) rotateX('+((0.5-py)*7).toFixed(2)+'deg) rotateY('+((px-0.5)*9).toFixed(2)+'deg)';
+      if(glare){ glare.style.setProperty('--gx',(px*100)+'%'); glare.style.setProperty('--gy',(py*100)+'%'); glare.style.opacity='1'; }
+    });
+    card.addEventListener('pointerleave',function(){ card.style.transform=''; if(glare) glare.style.opacity='0'; });
+  }
+
+  // lightweight confetti burst (2D canvas, runs only on form success)
+  function burstConfetti(){
+    if(reduce) return;
+    var c=document.createElement('canvas');
+    c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9999';
+    document.body.appendChild(c);
+    var ctx=c.getContext('2d'), W=c.width=innerWidth, H=c.height=innerHeight;
+    var cols=['#f4a62a','#ffc15e','#eceef1','#4cc38a'], P=[];
+    for(var i=0;i<90;i++) P.push({x:W/2+(Math.random()-0.5)*140,y:H*0.32,vx:(Math.random()-0.5)*9,vy:Math.random()*-9-4,r:3+Math.random()*4,c:cols[i%cols.length],a:1,rot:Math.random()*6,vr:(Math.random()-0.5)*0.3});
+    var t0=null;
+    function frame(ts){ if(!t0)t0=ts; ctx.clearRect(0,0,W,H); var alive=false;
+      P.forEach(function(p){ p.vy+=0.3; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.a-=0.006;
+        if(p.a>0&&p.y<H+30){ alive=true; ctx.save(); ctx.globalAlpha=Math.max(0,p.a); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.c; ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); } });
+      if(alive&&(ts-t0)<3200) requestAnimationFrame(frame); else c.remove();
+    }
+    requestAnimationFrame(frame);
   }
 })();
 </script>
@@ -799,7 +835,88 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
     return register(canvas, camera, scene, renderer, render, onResize);
   }
 
-  var INITS = { surface: initSurface, glyphs: initGlyphs, phone: initPhone, morph: initMorph };
+  /* ---------- graph (interactive, draggable 3D plot) ---------- */
+  function initGraph(canvas) {
+    var renderer = baseRenderer(canvas);
+    var s = sizeOf(canvas);
+    var camera = new THREE.PerspectiveCamera(48, s.w / s.h, 0.1, 100);
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x14161b, 9, 20);
+    var group = new THREE.Group(); scene.add(group);
+
+    var FUN = [
+      { f: function (x, z) { return (x * x - z * z) * 0.10; } },              // saddle
+      { f: function (x, z) { return Math.sin(Math.sqrt(x * x + z * z) * 1.7) * 0.75; } }, // ripple
+      { f: function (x, z) { return Math.sin(x * 1.1) * Math.cos(z * 1.1) * 0.75; } },    // waves
+      { f: function (x, z) { return (x * x + z * z) * 0.07 - 1.1; } }         // bowl
+    ];
+    var cur = 0, tgtCur = 0, blend = 1;
+
+    var SEG = isMobile ? 40 : 56, SIZE = 6;
+    var geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
+    var mat = new THREE.MeshBasicMaterial({ color: AMBER, wireframe: true, transparent: true, opacity: 0.6 });
+    group.add(new THREE.Mesh(geo, mat));
+    var pmat = new THREE.PointsMaterial({ color: AMBER2, size: 0.05, transparent: true, opacity: 0.8 });
+    group.add(new THREE.Points(geo, pmat));
+    var pos = geo.attributes.position, base = [];
+    for (var i = 0; i < pos.count; i++) base.push(pos.getX(i), pos.getZ(i));
+    function applySurface() {
+      for (var i = 0; i < pos.count; i++) {
+        var x = base[i * 2], z = base[i * 2 + 1];
+        var y = FUN[cur].f(x, z) * (1 - blend) + FUN[tgtCur].f(x, z) * blend;
+        pos.setY(i, y);
+      }
+      pos.needsUpdate = true;
+    }
+
+    var grid = new THREE.GridHelper(SIZE, 12, 0x3a4150, 0x272c36);
+    grid.material.transparent = true; grid.material.opacity = 0.4; grid.position.y = -1.6; group.add(grid);
+    var dot = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), new THREE.MeshBasicMaterial({ color: AMBER2 }));
+    group.add(dot);
+
+    // orbit controls (manual, no external dependency)
+    var theta = 0.7, phi = 1.0, radius = 8.4, dragging = false, lx = 0, ly = 0, idle = 0;
+    function updateCam() {
+      camera.position.set(
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.cos(theta)
+      );
+      camera.lookAt(0, 0, 0);
+    }
+    canvas.style.pointerEvents = 'auto'; canvas.style.touchAction = 'none'; canvas.style.cursor = 'grab';
+    canvas.addEventListener('pointerdown', function (e) { dragging = true; lx = e.clientX; ly = e.clientY; idle = 0; canvas.style.cursor = 'grabbing'; try { canvas.setPointerCapture(e.pointerId); } catch (err) {} });
+    canvas.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      theta -= (e.clientX - lx) * 0.008; phi -= (e.clientY - ly) * 0.008;
+      phi = Math.max(0.35, Math.min(1.45, phi)); lx = e.clientX; ly = e.clientY; idle = 0;
+    });
+    var stop = function () { dragging = false; canvas.style.cursor = 'grab'; };
+    window.addEventListener('pointerup', stop);
+    canvas.addEventListener('wheel', function (e) { e.preventDefault(); radius = Math.max(5.5, Math.min(13, radius + (e.deltaY > 0 ? 0.7 : -0.7))); }, { passive: false });
+
+    applySurface(); updateCam();
+    function render(t) {
+      if (blend < 1) { blend = Math.min(1, blend + 0.06); applySurface(); if (blend >= 1) cur = tgtCur; }
+      if (!dragging) { idle += 0.016; if (idle > 1) theta += 0.0018; }
+      updateCam();
+      var fx = Math.sin(t * 0.55) * 2.2, fz = Math.cos(t * 0.4) * 2.2;
+      var fn = FUN[tgtCur].f;
+      dot.position.set(fx, fn(fx, fz) + 0.06, fz);
+      renderer.render(scene, camera);
+    }
+    function onResize() { var z = sizeOf(canvas); renderer.setSize(z.w, z.h, false); camera.aspect = z.w / z.h; camera.updateProjectionMatrix(); }
+
+    window.VECTRA = window.VECTRA || {};
+    window.VECTRA.setGraph = function (i) {
+      i = ((i % FUN.length) + FUN.length) % FUN.length;
+      if (i === tgtCur) return;
+      cur = tgtCur; tgtCur = i; blend = 0; idle = 0;
+    };
+    return register(canvas, camera, scene, renderer, render, onResize);
+  }
+
+  var INITS = { surface: initSurface, glyphs: initGlyphs, phone: initPhone, morph: initMorph, graph: initGraph };
 
   function boot() {
     var nodes = document.querySelectorAll('canvas.v3d');
