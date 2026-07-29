@@ -232,10 +232,22 @@ html.v3d-active .device{opacity:0;transition:opacity .5s}
 
 /* ---------- SHOWCASE ---------- */
 #showcase{overflow:hidden}
-#showcase>.wrap{position:relative;z-index:1}
-#showcase .veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,var(--bg) 6%,rgba(20,22,27,.55) 44%,transparent 74%),linear-gradient(180deg,var(--bg),transparent 16%,transparent 84%,var(--bg))}
-#showcase canvas.v3d.v3d-on{opacity:.45}
 .showcase-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+/* function chips */
+.gfn-chips{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 20px}
+.gchip{font-family:var(--mono);font-size:.82rem;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:8px 15px;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.gchip:hover{color:var(--text);border-color:#3a4150}
+.gchip.active{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:600}
+.gsteps{margin-top:4px}
+.gsteps .mp-h b{font-family:var(--mono);font-size:1rem;color:var(--accent)}
+/* graph viewport */
+.graph-wrap{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:radial-gradient(circle at 60% 35%,rgba(244,166,42,.08),transparent 60%),var(--panel);min-height:380px}
+.graph-wrap canvas.v3d{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.graph-wrap canvas.v3d.v3d-on{opacity:1}
+.graph-hint{position:absolute;left:14px;bottom:12px;font-family:var(--mono);font-size:.7rem;color:var(--faint);background:rgba(16,19,26,.7);border:1px solid var(--line);border-radius:8px;padding:6px 10px;pointer-events:none}
+.graph-fallback{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint);font-family:var(--mono);font-size:.82rem;text-align:center;padding:24px}
+html.v3d-active .graph-fallback{display:none}
+@media(max-width:900px){.graph-wrap{min-height:320px;order:-1}}
 .mini-panels{display:flex;flex-direction:column;gap:16px}
 .mpanel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
 .mpanel .mp-h{display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -479,27 +491,28 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
 
 <!-- SHOWCASE -->
 <section id="showcase">
-  <canvas class="v3d" data-scene="morph" data-opacity="0.6" aria-hidden="true"></canvas>
-  <div class="veil" aria-hidden="true"></div>
   <div class="wrap showcase-grid">
     <div class="reveal">
       <span class="eyebrow">See it work</span>
       <h2 style="font-size:clamp(1.8rem,3.4vw,2.5rem);margin-top:14px">Answers, steps, and graphs — together.</h2>
-      <p style="color:var(--muted);margin-top:16px">Every calculator follows the same clear pattern: enter your values, read the result, expand the steps when you want the method, and view the graph when the problem has one. Consistent, quick, and easy to trust.</p>
+      <p style="color:var(--muted);margin-top:16px">Pick a surface and drag it around. The equation, the worked steps, and the live 3D graph all update together — that's exactly how a problem feels inside the app.</p>
+      <div class="gfn-chips" id="gChips">
+        <button type="button" class="gchip active" data-i="0">Saddle</button>
+        <button type="button" class="gchip" data-i="1">Ripple</button>
+        <button type="button" class="gchip" data-i="2">Waves</button>
+        <button type="button" class="gchip" data-i="3">Bowl</button>
+      </div>
+      <div class="mpanel gsteps">
+        <div class="mp-h"><span class="mp-ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7" stroke-linecap="round"/></svg></span><b id="gEq">z = x² − y²</b></div>
+        <div class="mrow"><span>evaluate at (x, y) = (1, 1)</span><b id="gEval">z = 0</b></div>
+        <div class="step"><span class="sn">1.</span><span id="gStep1">x² = 1,&nbsp; y² = 1</span></div>
+        <div class="step"><span class="sn">2.</span><span id="gStep2">z = 1 − 1 = <b style="color:var(--accent)">0</b></span></div>
+      </div>
     </div>
-    <div class="mini-panels reveal">
-      <div class="mpanel">
-        <div class="mp-h"><span class="mp-ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h7" stroke-linecap="round"/></svg></span><b>Linear Equation</b></div>
-        <div class="mrow"><span>a, b, c, d</span><b>3, 7, 1, −1</b></div>
-        <div class="mrow"><span>x =</span><b>−4</b></div>
-        <div class="step"><span class="sn">1.</span><span>(3−1)x = −1−7 &nbsp;→&nbsp; move x-terms together</span></div>
-        <div class="step"><span class="sn">2.</span><span>x = −8 ÷ 2 = <b style="color:var(--accent)">−4</b></span></div>
-      </div>
-      <div class="mpanel">
-        <div class="mp-h"><span class="mp-ic"><svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-5 3 3 5-7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>Compound Interest</b></div>
-        <div class="mrow"><span>Future value</span><b>$16,470</b></div>
-        <div class="spark" id="spark"></div>
-      </div>
+    <div class="graph-wrap reveal">
+      <canvas class="v3d" data-scene="graph" aria-label="Interactive 3D graph"></canvas>
+      <div class="graph-fallback">Interactive 3D graph<br>(enable graphics / a larger screen to explore it live)</div>
+      <span class="graph-hint">drag to rotate · scroll to zoom</span>
     </div>
   </div>
 </section>
@@ -725,10 +738,31 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
     typeScene();
   } else if(exprEl){ exprEl.textContent=scenes[0].expr; resEl.textContent='= '+scenes[0].res; }
 
-  // finance sparkline bars
+  // finance sparkline bars (only if present)
   var spark=document.getElementById('spark');
   if(spark){ var vals=[10,10.8,11.7,12.6,13.6,14.7,15.9]; spark.innerHTML=vals.map(function(v){
     return '<i style="height:'+((v/16)*100)+'%"></i>'; }).join(''); }
+
+  // interactive graph: chips update the equation, worked steps, and the 3D surface together
+  var gChips=document.getElementById('gChips');
+  if(gChips){
+    var GDATA=[
+      {eq:'z = x² − y²', ev:'z = 0',      s1:'x² = 1,&nbsp; y² = 1',              s2:'z = 1 − 1 = <b style="color:var(--accent)">0</b>'},
+      {eq:'z = sin(√(x²+y²))', ev:'z ≈ 0.99', s1:'r = √(1² + 1²) = 1.41',        s2:'z = sin(1.41) ≈ <b style="color:var(--accent)">0.99</b>'},
+      {eq:'z = sin(x)·cos(y)', ev:'z ≈ 0.45', s1:'sin(1) ≈ 0.84,&nbsp; cos(1) ≈ 0.54', s2:'z = 0.84 × 0.54 ≈ <b style="color:var(--accent)">0.45</b>'},
+      {eq:'z = x² + y²', ev:'z = 2',      s1:'x² = 1,&nbsp; y² = 1',              s2:'z = 1 + 1 = <b style="color:var(--accent)">2</b>'}
+    ];
+    var gEq=document.getElementById('gEq'), gEval=document.getElementById('gEval'),
+        gS1=document.getElementById('gStep1'), gS2=document.getElementById('gStep2');
+    gChips.addEventListener('click',function(e){
+      var b=e.target.closest('.gchip'); if(!b) return;
+      var i=parseInt(b.getAttribute('data-i'),10);
+      gChips.querySelectorAll('.gchip').forEach(function(c){ c.classList.toggle('active', c===b); });
+      var d=GDATA[i];
+      gEq.textContent=d.eq; gEval.textContent=d.ev; gS1.innerHTML=d.s1; gS2.innerHTML=d.s2;
+      if(window.VECTRA && window.VECTRA.setGraph) window.VECTRA.setGraph(i);
+    });
+  }
 
   // copy email
   var copyBtn=document.getElementById('copyEmail'), emailEl=document.getElementById('contactEmail');
@@ -1008,7 +1042,88 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
     return register(canvas, camera, scene, renderer, render, onResize);
   }
 
-  var INITS = { surface: initSurface, glyphs: initGlyphs, phone: initPhone, morph: initMorph };
+  /* ---------- graph (interactive, draggable 3D plot) ---------- */
+  function initGraph(canvas) {
+    var renderer = baseRenderer(canvas);
+    var s = sizeOf(canvas);
+    var camera = new THREE.PerspectiveCamera(48, s.w / s.h, 0.1, 100);
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x14161b, 9, 20);
+    var group = new THREE.Group(); scene.add(group);
+
+    var FUN = [
+      { f: function (x, z) { return (x * x - z * z) * 0.10; } },              // saddle
+      { f: function (x, z) { return Math.sin(Math.sqrt(x * x + z * z) * 1.7) * 0.75; } }, // ripple
+      { f: function (x, z) { return Math.sin(x * 1.1) * Math.cos(z * 1.1) * 0.75; } },    // waves
+      { f: function (x, z) { return (x * x + z * z) * 0.07 - 1.1; } }         // bowl
+    ];
+    var cur = 0, tgtCur = 0, blend = 1;
+
+    var SEG = isMobile ? 40 : 56, SIZE = 6;
+    var geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
+    var mat = new THREE.MeshBasicMaterial({ color: AMBER, wireframe: true, transparent: true, opacity: 0.6 });
+    group.add(new THREE.Mesh(geo, mat));
+    var pmat = new THREE.PointsMaterial({ color: AMBER2, size: 0.05, transparent: true, opacity: 0.8 });
+    group.add(new THREE.Points(geo, pmat));
+    var pos = geo.attributes.position, base = [];
+    for (var i = 0; i < pos.count; i++) base.push(pos.getX(i), pos.getZ(i));
+    function applySurface() {
+      for (var i = 0; i < pos.count; i++) {
+        var x = base[i * 2], z = base[i * 2 + 1];
+        var y = FUN[cur].f(x, z) * (1 - blend) + FUN[tgtCur].f(x, z) * blend;
+        pos.setY(i, y);
+      }
+      pos.needsUpdate = true;
+    }
+
+    var grid = new THREE.GridHelper(SIZE, 12, 0x3a4150, 0x272c36);
+    grid.material.transparent = true; grid.material.opacity = 0.4; grid.position.y = -1.6; group.add(grid);
+    var dot = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), new THREE.MeshBasicMaterial({ color: AMBER2 }));
+    group.add(dot);
+
+    // orbit controls (manual, no external dependency)
+    var theta = 0.7, phi = 1.0, radius = 8.4, dragging = false, lx = 0, ly = 0, idle = 0;
+    function updateCam() {
+      camera.position.set(
+        radius * Math.sin(phi) * Math.sin(theta),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.cos(theta)
+      );
+      camera.lookAt(0, 0, 0);
+    }
+    canvas.style.pointerEvents = 'auto'; canvas.style.touchAction = 'none'; canvas.style.cursor = 'grab';
+    canvas.addEventListener('pointerdown', function (e) { dragging = true; lx = e.clientX; ly = e.clientY; idle = 0; canvas.style.cursor = 'grabbing'; try { canvas.setPointerCapture(e.pointerId); } catch (err) {} });
+    canvas.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      theta -= (e.clientX - lx) * 0.008; phi -= (e.clientY - ly) * 0.008;
+      phi = Math.max(0.35, Math.min(1.45, phi)); lx = e.clientX; ly = e.clientY; idle = 0;
+    });
+    var stop = function () { dragging = false; canvas.style.cursor = 'grab'; };
+    window.addEventListener('pointerup', stop);
+    canvas.addEventListener('wheel', function (e) { e.preventDefault(); radius = Math.max(5.5, Math.min(13, radius + (e.deltaY > 0 ? 0.7 : -0.7))); }, { passive: false });
+
+    applySurface(); updateCam();
+    function render(t) {
+      if (blend < 1) { blend = Math.min(1, blend + 0.06); applySurface(); if (blend >= 1) cur = tgtCur; }
+      if (!dragging) { idle += 0.016; if (idle > 1) theta += 0.0018; }
+      updateCam();
+      var fx = Math.sin(t * 0.55) * 2.2, fz = Math.cos(t * 0.4) * 2.2;
+      var fn = FUN[tgtCur].f;
+      dot.position.set(fx, fn(fx, fz) + 0.06, fz);
+      renderer.render(scene, camera);
+    }
+    function onResize() { var z = sizeOf(canvas); renderer.setSize(z.w, z.h, false); camera.aspect = z.w / z.h; camera.updateProjectionMatrix(); }
+
+    window.VECTRA = window.VECTRA || {};
+    window.VECTRA.setGraph = function (i) {
+      i = ((i % FUN.length) + FUN.length) % FUN.length;
+      if (i === tgtCur) return;
+      cur = tgtCur; tgtCur = i; blend = 0; idle = 0;
+    };
+    return register(canvas, camera, scene, renderer, render, onResize);
+  }
+
+  var INITS = { surface: initSurface, glyphs: initGlyphs, phone: initPhone, morph: initMorph, graph: initGraph };
 
   function boot() {
     var nodes = document.querySelectorAll('canvas.v3d');
