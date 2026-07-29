@@ -242,12 +242,30 @@ footer{border-top:1px solid var(--line);padding:40px 0}
       btn.disabled=true; btn.textContent='Sending…';
       fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
         .then(function(r){
-          if(r.ok){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; }
+          if(r.ok){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; burstConfetti(); }
           else { status.className='f-status err'; status.textContent='Something went wrong. Please try again, or email vectracalc@gmail.com.'; }
         })
         .catch(function(){ status.className='f-status err'; status.textContent='Network error. Please try again, or email vectracalc@gmail.com.'; })
         .finally(function(){ btn.disabled=false; btn.textContent='Send message'; });
     });
+  }
+
+  // lightweight confetti burst (2D canvas, runs only on form success)
+  function burstConfetti(){
+    if(reduce) return;
+    var c=document.createElement('canvas');
+    c.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9999';
+    document.body.appendChild(c);
+    var ctx=c.getContext('2d'), W=c.width=innerWidth, H=c.height=innerHeight;
+    var cols=['#f4a62a','#ffc15e','#eceef1','#4cc38a'], P=[];
+    for(var i=0;i<90;i++) P.push({x:W/2+(Math.random()-0.5)*140,y:H*0.32,vx:(Math.random()-0.5)*9,vy:Math.random()*-9-4,r:3+Math.random()*4,c:cols[i%cols.length],a:1,rot:Math.random()*6,vr:(Math.random()-0.5)*0.3});
+    var t0=null;
+    function frame(ts){ if(!t0)t0=ts; ctx.clearRect(0,0,W,H); var alive=false;
+      P.forEach(function(p){ p.vy+=0.3; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.a-=0.006;
+        if(p.a>0&&p.y<H+30){ alive=true; ctx.save(); ctx.globalAlpha=Math.max(0,p.a); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.c; ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); } });
+      if(alive&&(ts-t0)<3200) requestAnimationFrame(frame); else c.remove();
+    }
+    requestAnimationFrame(frame);
   }
 })();
 </script>
