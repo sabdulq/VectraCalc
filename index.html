@@ -112,6 +112,10 @@ canvas.v3d.v3d-on{opacity:1}
 .hero-bg .glow{position:absolute;left:50%;top:-140px;transform:translateX(-50%);width:820px;height:520px;background:radial-gradient(ellipse at center,rgba(244,166,42,.14),transparent 65%);filter:blur(12px)}
 /* readability veil sits above the 3D canvas, below the text */
 .hero .veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 62% 52% at 50% 40%,rgba(20,22,27,.92),rgba(20,22,27,.55) 55%,transparent 78%),linear-gradient(180deg,var(--bg),transparent 22%)}
+@media(max-width:760px){
+  /* stronger veil on phones so the sub-text stays fully legible over the surface */
+  .hero .veil{background:radial-gradient(ellipse 96% 62% at 50% 40%,rgba(20,22,27,.96),rgba(20,22,27,.75) 58%,rgba(20,22,27,.25) 82%),linear-gradient(180deg,var(--bg),transparent 34%)}
+}
 .hero-in{z-index:2}
 /* when 3D is active, hide the CSS floating symbols (kept as fallback) */
 html.v3d-active .hero-bg .sym{display:none}

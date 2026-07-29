@@ -6,23 +6,30 @@
      the tab is hidden. Pixel ratio is capped. */
 (function () {
   if (!window.THREE) return;
+  // Accessibility: users who ask for reduced motion always get the CSS fallback.
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var narrow = window.innerWidth <= 840;
-  if (reduce || narrow) return;
+  if (reduce) return;
+  // Feature detection: no WebGL -> CSS fallback.
   try {
     var probe = document.createElement('canvas');
     if (!(probe.getContext('webgl') || probe.getContext('experimental-webgl'))) return;
   } catch (e) { return; }
 
+  // Runs on all devices. On phones we render lighter (fewer elements, lower
+  // pixel ratio) so it stays smooth and easy on the battery.
+  var isMobile = (window.matchMedia && window.matchMedia('(max-width: 840px)').matches) ||
+                 (('ontouchstart' in window) && window.innerWidth < 1024);
+
   var AMBER = 0xf4a62a, AMBER2 = 0xffc15e;
   var mouse = { x: 0, y: 0 };
-  window.addEventListener('mousemove', function (e) {
+  // pointermove covers both mouse and touch-drag; scenes also auto-animate when idle.
+  window.addEventListener('pointermove', function (e) {
     mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
   }, { passive: true });
 
   var scenes = [];
-  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var DPR = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
 
   function register(canvas, camera, scene, renderer, render, onResize) {
     var api = { canvas: canvas, camera: camera, scene: scene, renderer: renderer,
@@ -60,7 +67,7 @@
     var scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x14161b, 5, 12);
     var group = new THREE.Group(); scene.add(group);
-    var SEG = 60, SIZE = 7.5;
+    var SEG = isMobile ? 44 : 60, SIZE = 7.5;
     var geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
     var mat = new THREE.MeshBasicMaterial({ color: AMBER, wireframe: true, transparent: true, opacity: opts.opacity || 0.5 });
     var mesh = new THREE.Mesh(geo, mat); group.add(mesh);
@@ -109,7 +116,8 @@
       g.fillText(sym, 64, 68);
       var t = new THREE.CanvasTexture(c); return t;
     }
-    var count = opts.count || 15, items = [];
+    var count = opts.count || 15; if (isMobile) count = Math.min(count, 9);
+    var items = [];
     for (var i = 0; i < count; i++) {
       var faint = Math.random() < 0.5;
       var m = new THREE.MeshBasicMaterial({ map: tex(syms[i % syms.length], faint), transparent: true, side: THREE.DoubleSide, depthWrite: false, opacity: opts.opacity || 1 });
@@ -213,7 +221,7 @@
     var scene = new THREE.Scene();
     scene.fog = new THREE.Fog(0x14161b, 5, 13);
     var group = new THREE.Group(); scene.add(group);
-    var SEG = 60, SIZE = 7.5;
+    var SEG = isMobile ? 44 : 60, SIZE = 7.5;
     var geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG); geo.rotateX(-Math.PI / 2);
     var mat = new THREE.MeshBasicMaterial({ color: AMBER, wireframe: true, transparent: true, opacity: opts.opacity || 0.5 });
     group.add(new THREE.Mesh(geo, mat));
