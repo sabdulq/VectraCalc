@@ -69,13 +69,13 @@ The site updates automatically ~1–2 minutes after every push.
 
 Namecheap → Domain List → **vectracalc.com** → **Advanced DNS**. You need exactly these:
 
-| Type  | Host | Value                 |
-|-------|------|-----------------------|
-| A     | @    | 185.199.108.153       |
-| A     | @    | 185.199.109.153       |
-| A     | @    | 185.199.110.153       |
-| A     | @    | 185.199.111.153       |
-| CNAME | www  | `sabdulq.github.io.`  |
+| Type  | Host | Value                |
+| ----- | ---- | -------------------- |
+| A     | @    | 185.199.108.153      |
+| A     | @    | 185.199.109.153      |
+| A     | @    | 185.199.110.153      |
+| A     | @    | 185.199.111.153      |
+| CNAME | www  | `sabdulq.github.io.` |
 
 (The four A records make `vectracalc.com` work; the CNAME makes `www.vectracalc.com`
 work. GitHub then redirects the bare domain to `www` automatically. Delete any
@@ -110,7 +110,7 @@ as a company example), here is the complete recipe.
 **On Namecheap** (Domain List → vectracalc.com → Advanced DNS → Add New Record):
 
 | Type  | Host   | Value                | TTL       |
-|-------|--------|----------------------|-----------|
+| ----- | ------ | -------------------- | --------- |
 | CNAME | `calc` | `sabdulq.github.io.` | Automatic |
 
 That single CNAME record is all the DNS you need. Wait 10–30 minutes (up to a few
@@ -153,29 +153,6 @@ Expect the homepage to be indexed within a few days to two weeks. Searches for
 longer and improve as the site gains links (your Google Play listing linking to the
 site helps a lot).
 
-### "Google still shows the old page / wrong description"
-
-Right after you deploy, Google will still show the **old** single-page result with
-the old description, because it hasn't re-crawled yet. This is normal and temporary.
-Each page now has its own distinct title and description:
-
-- **Homepage** (`/`) — title "VectraCalc — Offline-First Apps…", company description.
-- **App page** (`/all-in-one-calculator/`) — title "VectraCalc: All-in-One Calculator…",
-  the 209-calculators description.
-
-To make Google pick up the split faster, after deploying use **URL Inspection** in
-Search Console on **both** URLs above and click **Request indexing** for each. Within
-a few days to ~2 weeks:
-
-- Searching **"vectracalc"** → homepage shows first (correct — it's your brand page).
-- Searching **"vectracalc all in one calculator"** → the app page shows, because it's
-  the only page whose title, URL, and content all match that phrase. Google decides
-  final ranking, but the new structure gives the app page every signal to win that query.
-
-You cannot force which page ranks #1 — that's Google's call — but separate pages with
-separate descriptions (which you now have) is exactly what makes the app query land on
-the app page instead of the homepage.
-
 ## 7. When you publish on Google Play
 
 Use these URLs in Play Console:
@@ -188,12 +165,12 @@ Use these URLs in Play Console:
 
 ## Editing cheat-sheet
 
-| What                         | Where                                                  |
-|------------------------------|--------------------------------------------------------|
-| Company story / about text   | `index.html` → `<!-- ABOUT -->` section                |
-| Add a new app card           | `index.html` → `<!-- APPS -->` section                 |
-| Contact email address        | search `vectracalc@gmail.com` across all files         |
-| Social links                 | see section 2 above                                    |
-| Company FAQ questions        | `faq/index.html` (both the visible list and the JSON-LD block in `<head>`) |
-| App page content             | `all-in-one-calculator/index.html`                     |
-| Search engine URL list       | `sitemap.xml`                                          |
+| What                       | Where                                                                      |
+| -------------------------- | -------------------------------------------------------------------------- |
+| Company story / about text | `index.html` → `<!-- ABOUT -->` section                                    |
+| Add a new app card         | `index.html` → `<!-- APPS -->` section                                     |
+| Contact email address      | search `vectracalc@gmail.com` across all files                             |
+| Social links               | see section 2 above                                                        |
+| Company FAQ questions      | `faq/index.html` (both the visible list and the JSON-LD block in `<head>`) |
+| App page content           | `all-in-one-calculator/index.html`                                         |
+| Search engine URL list     | `sitemap.xml`                                                              |
