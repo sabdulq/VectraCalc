@@ -307,7 +307,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
   <div class="wrap trust-in">
     <div class="trust-item"><span class="tn">100%</span><span class="tl">Offline-first</span></div>
     <div class="trust-item"><span class="tn">0</span><span class="tl">Accounts required</span></div>
-    <div class="trust-item"><span class="tn">209</span><span class="tl">Calculators shipped</span></div>
+    <div class="trust-item"><span class="tn">200+</span><span class="tl">Calculators shipped</span></div>
     <div class="trust-item"><span class="tn">∞</span><span class="tl">More tools coming</span></div>
   </div>
 </div>
@@ -359,7 +359,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
         <h3>VectraCalc: All-in-One Calculator</h3>
         <p>Our flagship app — a focused, offline-first calculator suite for math, finance, physics, conversions and everyday use, with worked solutions and graphs. Open the app page for the full rundown.</p>
         <div class="app-stats">
-          <div class="astat"><div class="n">209</div><div class="l">Calculators</div></div>
+          <div class="astat"><div class="n">200+</div><div class="l">Calculators</div></div>
           <div class="astat"><div class="n">190+</div><div class="l">Step-by-step</div></div>
           <div class="astat"><div class="n">40+</div><div class="l">Live graphs</div></div>
         </div>
@@ -396,9 +396,13 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
       <p>Questions, feedback, ideas, or partnership inquiries — we read every message.</p>
     </div>
     <div class="contact-grid">
-      <!-- To activate this form: create a free form at formspree.io and replace
-           YOUR_FORM_ID below with the ID Formspree gives you (e.g. mqkvezyz). -->
-      <form class="form-card reveal" id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <!-- To activate this form: get a free access key at web3forms.com (enter your
+           email; they send you a key) and replace w3f_2cc3ab0955a247e7892197f4040700103c0ea4c61d5c0b63 below with it. -->
+      <form class="form-card reveal" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="w3f_2cc3ab0955a247e7892197f4040700103c0ea4c61d5c0b63">
+        <input type="hidden" name="subject" value="New message from the VectraCalc website">
+        <input type="hidden" name="from_name" value="VectraCalc Website">
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
         <div class="f-row">
           <div>
             <label for="cf-name">Name</label>
@@ -521,15 +525,17 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px;margin-top:20px}
   if(form){
     form.addEventListener('submit',function(e){
       e.preventDefault();
-      if(form.action.indexOf('YOUR_FORM_ID')>-1){
+      var akey=form.querySelector('[name=access_key]');
+      if(!akey || akey.value.indexOf('w3f_2cc3ab0955a247e7892197f4040700103c0ea4c61d5c0b63')>-1){
         status.className='f-status err';
         status.textContent='The form isn’t connected yet — please email us at vectracalc@gmail.com.';
         return;
       }
       btn.disabled=true; btn.textContent='Sending…';
       fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
-        .then(function(r){
-          if(r.ok){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; burstConfetti(); }
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if(d && d.success){ form.reset(); status.className='f-status ok'; status.textContent='Thanks — your message is on its way. We’ll get back to you soon.'; burstConfetti(); }
           else { status.className='f-status err'; status.textContent='Something went wrong. Please try again, or email vectracalc@gmail.com.'; }
         })
         .catch(function(){ status.className='f-status err'; status.textContent='Network error. Please try again, or email vectracalc@gmail.com.'; })
