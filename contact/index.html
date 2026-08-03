@@ -576,8 +576,7 @@
 
       <section class="body">
         <div class="wrap contact-grid">
-          <!-- To activate this form: get a free access key at web3forms.com (enter your
-         email; they send you a key) and replace w3f_2cc3ab0955a247e7892197f4040700103c0ea4c61d5c0b63 below with it. -->
+          <!-- To activate this form: Contact form powered by Web3Forms. The access_key below is this site's public key (safe to expose). -->
           <form
             class="form-card reveal"
             id="contactForm"
@@ -783,12 +782,7 @@
           form.addEventListener("submit", function (e) {
             e.preventDefault();
             var akey = form.querySelector("[name=access_key]");
-            if (
-              !akey ||
-              akey.value.indexOf(
-                "w3f_2cc3ab0955a247e7892197f4040700103c0ea4c61d5c0b63",
-              ) > -1
-            ) {
+            if (!akey || !akey.value || akey.value.length < 10) {
               status.className = "f-status err";
               status.textContent =
                 "The form isn’t connected yet — please email us at vectracalc@gmail.com.";
