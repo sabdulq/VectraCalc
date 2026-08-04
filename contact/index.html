@@ -586,7 +586,7 @@
             <input
               type="hidden"
               name="access_key"
-              value="w3f_383a9a960da9fb52b3370f2d3195214c76f9e3972d0cfb06"
+              value="cdb35c6c-6de0-40ae-8f5c-aa195fe07df3"
             />
             <input
               type="hidden"
@@ -808,7 +808,7 @@
                 } else {
                   status.className = "f-status err";
                   status.textContent =
-                    "Something went wrong. Please try again, or email vectracalc@gmail.com.";
+                    (d && d.message ? d.message : "Web3Forms error") + " - or email vectracalc@gmail.com.";
                 }
               })
               .catch(function () {
